@@ -9,13 +9,16 @@ import marketplaceAbi from "./abi/marketplaceAbi.json" assert { type: "json" };
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("api/", routes);
-app.use("/", routes);
+// app.use("api/", routes);
+// app.use("/", routes);
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
  });
  
+ app.get("/", (req, res) => {
+   res.send("Welcome to D-Beat backend!");
+ })
 
 const factoryAddress = "0x242309090561301ff7A27a1d675f2c0dA06845FD";
 const marketplaceAddress = "0x4690C5d846Abb49d0b6B2a04D4aa3B16e4aFC287";
