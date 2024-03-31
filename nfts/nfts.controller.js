@@ -1,7 +1,7 @@
-import { factoryContract, marketplaceContract } from "../index.js";
+const { factoryContract, marketplaceContract } = require("../index.js");
 
 //Factory endpoints
-export const createNFT = async (req, res) => {
+const createNFT = async (req, res) => {
   try {
     const { initialOwner, artistAddress, metadata, mintAmount, name, symbol } =
       req.body;
@@ -20,7 +20,7 @@ export const createNFT = async (req, res) => {
   }
 };
 
-export const getNFTsByCreator = async (req, res) => {
+const getNFTsByCreator = async (req, res) => {
   try {
     const { address } = req.params;
     const nftAddresses = await factoryContract.getNFTsByCreator(address);
@@ -31,7 +31,7 @@ export const getNFTsByCreator = async (req, res) => {
 };
 
 //Marketplace endpoints
-export const listNFT = async (req, res) => {
+const listNFT = async (req, res) => {
   try {
     const { nftAddress, tokenId, price } = req.body;
     const tx = await marketplaceContract.listItem(nftAddress, tokenId, price, {
@@ -44,7 +44,7 @@ export const listNFT = async (req, res) => {
   }
 };
 
-export const cancelNFTListing = async (req, res) => {
+const cancelNFTListing = async (req, res) => {
   try {
     const { nftAddress, tokenId } = req.params;
     const tx = await marketplaceContract.cancelListing(nftAddress, tokenId);
@@ -55,7 +55,7 @@ export const cancelNFTListing = async (req, res) => {
   }
 };
 
-export const buyNFT = async (req, res) => {
+const buyNFT = async (req, res) => {
   try {
     const { nftAddress, tokenId } = req.params;
     const tx = await marketplaceContract.buyItem(nftAddress, tokenId, {
@@ -68,7 +68,7 @@ export const buyNFT = async (req, res) => {
   }
 };
 
-export const getNFTPrice = async (req, res) => {
+const getNFTPrice = async (req, res) => {
   try {
     const { nftAddress, tokenId } = req.params;
     const price = await marketplaceContract.getPrice(nftAddress, tokenId);
@@ -76,4 +76,13 @@ export const getNFTPrice = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+module.exports = {
+  createNFT,
+  getNFTsByCreator,
+  listNFT,
+  cancelNFTListing,
+  buyNFT,
+  getNFTPrice,
 };
