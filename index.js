@@ -1,7 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
-import routes from "./routes.js";
+// import routes from "./routes.js";
 import { ethers } from "ethers";
 import factoryAbi from "./abi/factoryAbi.json" assert { type: "json" };
 import marketplaceAbi from "./abi/marketplaceAbi.json" assert { type: "json" };
