@@ -1,5 +1,5 @@
-import db from "../db/db.js";
-import jwt from "jsonwebtoken";
+const db = require("../db/db.js");
+const jwt = require("jsonwebtoken");
 
 class AuthService {
   async registerUser(walletAddress) {
@@ -56,4 +56,4 @@ class AuthService {
   }
 }
 
-export default AuthService;
+module.exports = AuthService;
