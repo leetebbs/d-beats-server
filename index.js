@@ -5,12 +5,17 @@ const factoryAbi = require("./abi/factoryAbi.json");
 const marketplaceAbi = require("./abi/marketplaceAbi.json");
 require("dotenv").config();
 const routes = require("./routes.js");
+const artistRoutes = require("./artists/artists.routes.js");
+const uploadRoutes = require("./uploads/uploads.routes.js");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 // app.use("api/", routes);
 // app.use("/", routes);
+app.use("/artists", artistRoutes);
+app.use("/uploads", uploadRoutes);
+
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
@@ -50,4 +55,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-module.exports = { factoryContract, marketplaceContract, app };
+module.exports = { factoryContract, marketplaceContract };

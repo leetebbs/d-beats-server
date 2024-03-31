@@ -1,4 +1,4 @@
-const db = require("../db/db.js");
+const { db, DBManager } = require("../db/db.js");
 const jwt = require("jsonwebtoken");
 
 class AuthService {
