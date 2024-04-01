@@ -30,8 +30,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to D-Beat backend!");
 });
 
-const factoryAddress = "0x242309090561301ff7A27a1d675f2c0dA06845FD";
-const marketplaceAddress = "0x4690C5d846Abb49d0b6B2a04D4aa3B16e4aFC287";
+const factoryAddress = "0x036E9Ba2FF01F2C6452B8fcd11c26B67534F73B4";
+const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C";
 
 const provider = new ethers.providers.WebSocketProvider(
   `wss://arb-sepolia.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_ARB_SEPOLIA_KEY}`
