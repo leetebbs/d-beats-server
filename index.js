@@ -1,9 +1,13 @@
 const express = require("express");
 const cors = require("cors");
 const { ethers } = require("ethers");
+require("dotenv").config();
+
+//importing the abi files
 const factoryAbi = require("./abi/factoryAbi.json");
 const marketplaceAbi = require("./abi/marketplaceAbi.json");
-require("dotenv").config();
+
+//importing the routes
 const routes = require("./routes.js");
 const artistRoutes = require("./artists/artists.routes.js");
 const uploadRoutes = require("./uploads/uploads.routes.js");
@@ -11,8 +15,9 @@ const uploadRoutes = require("./uploads/uploads.routes.js");
 const app = express();
 app.use(cors());
 app.use(express.json());
-// app.use("api/", routes);
-// app.use("/", routes);
+
+// Use the routes
+app.use("/", routes);
 app.use("/artists", artistRoutes);
 app.use("/uploads", uploadRoutes);
 
@@ -46,10 +51,6 @@ const marketplaceContract = new ethers.Contract(
 );
 
 const PORT = process.env.REACT_APP_PORT || 5000;
-
-// app.get("/", (req, res) => {
-//   res.send("Welcome to D-Beat backend!");
-// });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
