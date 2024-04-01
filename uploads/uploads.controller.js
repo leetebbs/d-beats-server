@@ -4,19 +4,18 @@ const uploadController = {
   async uploadMusic(req, res) {
     try {
       const { artistId, title, description, image, price } = req.body;
-      const musicFile = req.file;
+      const musicFile = req.file.buffer.toString("base64");
 
-      const ipfsCid = await uploadService.storeOnIPFS(musicFile);
-      await uploadService.storeMetadataInWeaveDB(
+      await uploadService.storeTrackMetadata(
         artistId,
         title,
         description,
         image,
-        ipfsCid,
+        musicFile,
         price
       );
 
-      res.status(200).json({ message: "Music uploaded successfully", ipfsCid });
+      res.status(200).json({ message: "Music uploaded successfully" });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

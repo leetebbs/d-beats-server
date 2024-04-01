@@ -43,31 +43,22 @@ class DBManager {
     }
   }
 
-  static async storeTrackMetadata(
-    artistId,
-    title,
-    description,
-    image,
-    ipfsCid,
-    price
-  ) {
+  static async createDocument(collectionName, data) {
     try {
-      // Store the track metadata in WeaveDB
-      await db.createDocument("Music", {
-        title,
-        description,
-        image,
-        ipfsCID: ipfsCid,
-        price,
-        artistId,
-        saleStatus: "onSale",
-      });
+      await db.createDocument(collectionName, data);
     } catch (error) {
-      throw new Error(
-        `Error storing track metadata in WeaveDB: ${error.message}`
-      );
+      throw new Error(`Error creating document in WeaveDB: ${error.message}`);
+    }
+  }
+
+  static async queryDocuments(collectionName, query) {
+    try {
+      const documents = await db.queryDocuments(collectionName, query);
+      return documents;
+    } catch (error) {
+      throw new Error(`Error querying documents in WeaveDB: ${error.message}`);
     }
   }
 }
 
-module.exports = { db, DBManager };
+module.exports = DBManager;
