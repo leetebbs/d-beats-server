@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const {
   createNFT,
   getNFTsByCreator,
@@ -19,3 +18,5 @@ router.post("/nfts/:nftAddress/:tokenId/list", listNFT);
 router.post("/nfts/:nftAddress/:tokenId/cancel", cancelNFTListing);
 router.post("/nfts/:nftAddress/:tokenId/buy", buyNFT);
 router.get("/nfts/:nftAddress/:tokenId/price", getNFTPrice);
+
+module.exports = router;
