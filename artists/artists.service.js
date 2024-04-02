@@ -1,10 +1,10 @@
-const db = require("../db/db.js");
+const DBManager = require("../db/db.js");
 
 const artistService = {
   async submitArtistApplication(userId, twitterHandle) {
     try {
       // Store the artist application data in WeaveDB
-      await db.setArtistApplicationData(userId, twitterHandle);
+      await DBManager.setArtistApplicationData(userId, twitterHandle);
     } catch (error) {
       throw new Error(`Error submitting artist application: ${error.message}`);
     }
@@ -12,7 +12,8 @@ const artistService = {
   async getPendingApplications() {
     try {
       // Fetch the list of pending artist applications from WeaveDB
-      const pendingApplications = await db.getPendingArtistApplications();
+      const pendingApplications =
+        await DBManager.getPendingArtistApplications();
       return pendingApplications;
     } catch (error) {
       throw new Error(
@@ -23,7 +24,7 @@ const artistService = {
   async approveArtist(userId) {
     try {
       // Update the user's role to "artist" in WeaveDB
-      await db.updateUserRole(userId, "artist");
+      await DBManager.updateUserRole(userId, "artist");
     } catch (error) {
       throw new Error(`Error approving artist: ${error.message}`);
     }
