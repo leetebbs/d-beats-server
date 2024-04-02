@@ -1,9 +1,10 @@
 const express = require("express");
-const uploadController = require("./uploads.controller.js");
+const multer = require("multer");
+const { uploadMusicController } = require("./uploads.controller.js");
 
 const router = express.Router();
+const upload = multer();
 
-// Music upload route
-router.post("/music", uploadController.uploadMusic);
+router.post("/upload", upload.single("file"), uploadMusicController);
 
 module.exports = router;

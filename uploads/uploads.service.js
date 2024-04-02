@@ -1,31 +1,27 @@
-const db = require("../db/db.js");
+const createIPFSClient = require("../utils/ipfs.js");
+const DBManager = require("../db/db.js");
 
-const uploadService = {
-  async storeTrackMetadata(
-    artistId,
-    title,
-    description,
-    image,
-    musicFile,
-    price
-  ) {
-    try {
-      // Store the track metadata in WeaveDB
-      await db.createDocument("Music", {
-        title,
-        description,
-        image,
-        musicFile,
-        price,
-        artistId,
-        saleStatus: "onSale",
-      });
-    } catch (error) {
-      throw new Error(
-        `Error storing track metadata in WeaveDB: ${error.message}`
-      );
-    }
-  },
+const uploadMusic = async (musicData) => {
+  try {
+    const { jsonStore, dagJsonStore } = await createIPFSClient();
+    const cid = await jsonStore.add(musicData.file.buffer);
+
+    const music = {
+      title: musicData.title,
+      description: musicData.description,
+      image: "",
+      ipfsCID: cid,
+      price: musicData.price,
+      artistId: musicData.artistId,
+      saleStatus: "onSale",
+    };
+
+    await DBManager.storeMusic(music);
+
+    return cid;
+  } catch (error) {
+    throw new Error(`Error uploading music: ${error.message}`);
+  }
 };
 
-module.exports = uploadService;
+module.exports = { uploadMusic };
