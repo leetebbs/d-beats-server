@@ -1,6 +1,6 @@
-const { createHelia } = require("helia");
-const { json } = require("@helia/json");
-const { dagJson } = require("@helia/dag-json");
+import { json } from "@helia/json";
+import { dagJson } from "@helia/dag-json";
+import { createHelia } from "helia";
 
 const createIPFSClient = async () => {
   const helia = await createHelia();

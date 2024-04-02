@@ -1,8 +1,8 @@
-const createIPFSClient = require("../utils/ipfs.js");
 const DBManager = require("../db/db.js");
 
 const uploadMusic = async (musicData) => {
   try {
+    const createIPFSClient = await import("../utils/ipfs.mjs");
     const { jsonStore, dagJsonStore } = await createIPFSClient();
     const cid = await jsonStore.add(musicData.file.buffer);
 
