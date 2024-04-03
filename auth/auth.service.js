@@ -18,7 +18,7 @@ class AuthService {
       }
 
       // Create a new user document in WeaveDB
-      await db.add({ walletAddress, role: "user" }, "User");
+      await db.add({ walletAddress, role: "user" }, "users");
       return { walletAddress, role: "user" };
     } catch (err) {
       throw err;
