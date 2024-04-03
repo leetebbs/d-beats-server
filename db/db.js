@@ -7,48 +7,6 @@ const db = new WeaveDB({ contractTxId: process.env.REACT_APP_CONTRACT_TX_ID });
 })();
 
 class DBManager {
-  static async setArtistApplicationData(userId, twitterHandle) {
-    try {
-      // Store the artist application data in WeaveDB
-      await db.upsert(
-        {
-          userId,
-          twitterHandle,
-          verificationStatus: "pending",
-        },
-        "Artist",
-        userId
-      );
-    } catch (error) {
-      throw new Error(`Error submitting artist application: ${error.message}`);
-    }
-  }
-
-  static async getPendingArtistApplications() {
-    try {
-      // Fetch the list of pending artist applications from WeaveDB
-      const pendingApplications = await db.get("Artist", [
-        "verificationStatus",
-        "==",
-        "pending",
-      ]);
-      return pendingApplications;
-    } catch (error) {
-      throw new Error(
-        `Error fetching pending artist applications: ${error.message}`
-      );
-    }
-  }
-
-  static async updateUserRole(userId, role) {
-    try {
-      // Update the user's role in WeaveDB
-      await db.update({ role }, "User", userId);
-    } catch (error) {
-      throw new Error(`Error approving artist: ${error.message}`);
-    }
-  }
-
   static async createDocument(collectionName, data) {
     try {
       await db.add(data, collectionName);
