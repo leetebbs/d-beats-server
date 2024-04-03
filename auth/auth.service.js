@@ -13,22 +13,15 @@ class AuthService {
       if (existingUser.length > 0) {
         throw new Error("User already registered");
       }
+      if (!walletAddress) {
+        throw new Error("Wallet address is required");
+      }
 
       // Create a new user document in WeaveDB
-      const user = await db.set(
-        {
-          walletAddress,
-          role: "user",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        "users",
-        walletAddress
-      );
-
-      return user;
+      await db.add({ walletAddress, role: "user" }, "User");
+      return { walletAddress, role: "user" };
     } catch (err) {
-      throw err;
+      throw new Error(`Error registering user: ${error.message}`);
     }
   }
 
