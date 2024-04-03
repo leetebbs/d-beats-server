@@ -21,7 +21,7 @@ class AuthService {
       await db.add({ walletAddress, role: "user" }, "User");
       return { walletAddress, role: "user" };
     } catch (err) {
-      throw new Error(`Error registering user: ${error.message}`);
+      throw err;
     }
   }
 
