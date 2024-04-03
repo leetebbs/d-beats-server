@@ -40,4 +40,4 @@ class DBManager {
  // Other methods...
 }
 
-module.exports = DBManager;
+module.exports = { DBManager, db };

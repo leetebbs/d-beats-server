@@ -1,4 +1,4 @@
-const DBManager = require("../db/db.js");
+const { DBManager } = require("../db/db.js");
 
 const uploadMusic = async (musicData) => {
   try {
