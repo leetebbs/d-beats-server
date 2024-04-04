@@ -3,6 +3,8 @@ const cors = require("cors");
 const { ethers } = require("ethers");
 require("dotenv").config();
 
+const nftsService = require("./nfts/nfts.service.js");
+
 //importing the abi
 const factoryAbi = require("./abi/factoryAbi.json");
 const marketplaceAbi = require("./abi/marketplaceAbi.json");
@@ -41,66 +43,93 @@ app.get("/", (req, res) => {
 
 //factory listener
 async function factoryListener() {
-  const Fcontract = new ethers.Contract(factoryAddress, factoryAbi, wssProvider);
- 
-  Fcontract.on("NewNFT", (nftAddress, _initialOwner, _artistAddress, _newTokenURI, _mintAmount, name, symbol, event) => {
-     let info = {
-       nftAddress: nftAddress,
-       initialOwner: _initialOwner,
-       artistAddress: _artistAddress,
-       newTokenURI: _newTokenURI,
-       mintAmount: _mintAmount,
-       name: name,
-       symbol: symbol,
-       data: event,
-     }
- // we need to store this info in the database when to event is triggered
-     console.log(JSON.stringify(info, null, 8));
-  });
- }
- 
+  const Fcontract = new ethers.Contract(
+    factoryAddress,
+    factoryAbi,
+    wssProvider
+  );
+
+  Fcontract.on(
+    "NewNFT",
+    async (
+      nftAddress,
+      _initialOwner,
+      _artistAddress,
+      _newTokenURI,
+      _mintAmount,
+      name,
+      symbol,
+      event
+    ) => {
+      let info = {
+        nftAddress: nftAddress,
+        initialOwner: _initialOwner,
+        artistAddress: _artistAddress,
+        newTokenURI: _newTokenURI,
+        mintAmount: _mintAmount,
+        name: name,
+        symbol: symbol,
+        data: event,
+      };
+
+      // store this info in the database when to event is triggered
+      try {
+        await nftsService.storeNFTData(info);
+        console.log("NFT data stored successfully");
+      } catch (error) {
+        console.error("Error storing NFT data:", error.message);
+      }
+      console.log(JSON.stringify(info, null, 8));
+    }
+  );
+}
+
 factoryListener();
 
 //marketplace listener
 async function marketplaceListener() {
-  const Mcontract = new ethers.Contract(marketplaceAddress, marketplaceAbi, wssProvider);
- //Listen to items listed event
+  const Mcontract = new ethers.Contract(
+    marketplaceAddress,
+    marketplaceAbi,
+    wssProvider
+  );
+  //Listen to items listed event
   Mcontract.on("ItemListed", (nftAddress, tokenId, price, event) => {
-     let info = {
-       nftAddress: nftAddress,
-       tokenId: tokenId,
-       price: price,
-       data: event,
-     }
- // we need to store this info in the database when to event is triggered
-     console.log(JSON.stringify(info, null, 8));
+    let info = {
+      nftAddress: nftAddress,
+      tokenId: tokenId,
+      price: price,
+      data: event,
+    };
+    // we need to store this info in the database when to event is triggered
+    console.log(JSON.stringify(info, null, 8));
   });
 
   //Listen to items canceled event
   Mcontract.on("ItemCanceled", (nftAddress, tokenId, event) => {
-     let info = {
-       nftAddress: nftAddress,
-       tokenId: tokenId,
-       data: event,
-     }
- // we need to store this info in the database when to event is triggered
-     console.log(JSON.stringify(info, null, 8));
+    let info = {
+      nftAddress: nftAddress,
+      tokenId: tokenId,
+      data: event,
+    };
+    // we need to store this info in the database when to event is triggered
+    console.log(JSON.stringify(info, null, 8));
   });
 
   //Listen to items bought event
   Mcontract.on("ItemBought", (nftAddress, tokenId, buyer, price, event) => {
-     let info = {
-       nftAddress: nftAddress,
-       tokenId: tokenId,
-       buyer: buyer,
-       price: price,
-       data: event,
-     }
- // we need to store this info in the database when to event is triggered
-     console.log(JSON.stringify(info, null, 8));
+    let info = {
+      nftAddress: nftAddress,
+      tokenId: tokenId,
+      buyer: buyer,
+      price: price,
+      data: event,
+    };
+    // we need to store this info in the database when to event is triggered
+    console.log(JSON.stringify(info, null, 8));
   });
- }
- 
+}
+
 marketplaceListener();
 
 // Use ES module syntax for exporting

@@ -1,6 +1,27 @@
 const { factoryContract, marketplaceContract } = require("../index.js");
 
 class NFTService {
+  async storeNFTData(nftData) {
+    try {
+      await DBManager.createDocument("nfts", nftData);
+    } catch (error) {
+      throw new Error(`Error storing NFT data: ${error.message}`);
+    }
+  }
+
+  async getNFTsByArtist(artistAddress) {
+    try {
+      const nfts = await DBManager.queryDocuments("nfts", [
+        "artistAddress",
+        "==",
+        artistAddress,
+      ]);
+      return nfts;
+    } catch (error) {
+      throw new Error(`Error fetching NFTs by artist: ${error.message}`);
+    }
+  }
+
   async createNFT(
     initialOwner,
     artistAddress,
@@ -25,14 +46,14 @@ class NFTService {
     }
   }
 
-  async getNFTsByCreator(address) {
-    try {
-      const nftAddresses = await factoryContract.getNFTsByCreator(address);
-      return nftAddresses;
-    } catch (error) {
-      throw new Error(`Error getting NFTs by creator: ${error.message}`);
-    }
-  }
+  // async getNFTsByCreator(address) {
+  //   try {
+  //     const nftAddresses = await factoryContract.getNFTsByCreator(address);
+  //     return nftAddresses;
+  //   } catch (error) {
+  //     throw new Error(`Error getting NFTs by creator: ${error.message}`);
+  //   }
+  // }
 
   async listNFT(nftAddress, tokenId, price) {
     try {

@@ -12,6 +12,7 @@ const {
 // DBeatsFactory endpoints
 router.post("/nfts", createNFT);
 router.get("/nfts/creator/:address", getNFTsByCreator);
+router.get("/artist/:address", getNFTsByArtist);
 
 // DBeatsMarketplace endpoints
 router.post("/nfts/:nftAddress/:tokenId/list", listNFT);
