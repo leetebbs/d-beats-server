@@ -12,6 +12,15 @@ const artistController = {
       res.status(500).json({ error: error.message });
     }
   },
+
+  async getArtists(req, res) {
+    try {
+      const result = await artistService.getArtists();
+    res.json({ result: result });
+  }catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+},
   async reviewApplications(req, res) { 
     try {
       const pendingApplications = await artistService.getPendingApplications();

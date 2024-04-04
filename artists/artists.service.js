@@ -26,6 +26,11 @@ const artistService = {
        throw new Error(`Error submitting artist application: ${error.message}`);
      }
   },
+
+  async getArtists(){
+    const result = await db.get("Artist");
+    return result;
+  },
   // const addTask = async (task) => {
   //   await db.add(
   //     {
