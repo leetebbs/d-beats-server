@@ -2,17 +2,19 @@ const NFTService = require("./nfts.service.js");
 
 const createNFT = async (req, res) => {
   try {
-    const { initialOwner, artistAddress, metadata, mintAmount, name, symbol } =
+    const { initialOwner, artistAddress, nftAddress, mintAmount, tokenURI } =
       req.body;
     const result = await NFTService.createNFT(
       initialOwner,
       artistAddress,
-      metadata,
+      nftAddress,
+      // metadata,
       mintAmount,
-      name,
-      symbol
+      tokenURI,
+      // name,
+      // symbol
     );
-    res.status(201).json(result);
+    res.status(201).json(result.data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

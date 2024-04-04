@@ -2,12 +2,28 @@ const express = require("express");
 const cors = require("cors");
 const { ethers } = require("ethers");
 require("dotenv").config();
+var WeaveDB = require('weavedb-sdk-node');
 
 //importing the abi
 const factoryAbi = require("./abi/factoryAbi.json");
 const marketplaceAbi = require("./abi/marketplaceAbi.json");
 const factoryAddress = "0x036E9Ba2FF01F2C6452B8fcd11c26B67534F73B4";
-const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C";
+const marketplaceAddress = "0x4690C5d846Abb49d0b6B2a04D4aa3B16e4aFC287"; 
+// const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C"; 
+const wallet = {
+  getAddressString: () => process.env.ADMIN_ADDRESS.toLowerCase(),
+  getPrivateKey: () => Buffer.from(process.env.ADMIN_PRIVATE_KEY, "hex"),
+};
+let db;
+global.owner = process.env.ADMIN_ADDRESS;
+// Initialize WeaveDB
+async function init() {
+  db = new WeaveDB({ contractTxId: process.env.CONTRACT_TX_ID });
+  await db.initializeWithoutWallet();
+  db.setDefaultWallet(wallet, "evm");
+}
+
+init();
 const wssProvider = new ethers.providers.WebSocketProvider(
   `wss://arb-sepolia.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_ARB_SEPOLIA_KEY}`
 );
@@ -42,20 +58,27 @@ app.get("/", (req, res) => {
 //factory listener
 async function factoryListener() {
   const Fcontract = new ethers.Contract(factoryAddress, factoryAbi, wssProvider);
- 
-  Fcontract.on("NewNFT", (nftAddress, _initialOwner, _artistAddress, _newTokenURI, _mintAmount, name, symbol, event) => {
-     let info = {
-       nftAddress: nftAddress,
-       initialOwner: _initialOwner,
-       artistAddress: _artistAddress,
-       newTokenURI: _newTokenURI,
-       mintAmount: _mintAmount,
-       name: name,
-       symbol: symbol,
-       data: event,
-     }
- // we need to store this info in the database when to event is triggered
-     console.log(JSON.stringify(info, null, 8));
+  
+  Fcontract.on("NewNFT", async (nftAddress, _initialOwner, _artistAddress, _newTokenURI, _mintAmount, name, symbol, event) => {
+      let Data = {
+        nftAddress: nftAddress,
+        initialOwner: _initialOwner,
+        artistAddress: _artistAddress,
+        newTokenURI: _newTokenURI,
+        mintAmount: parseInt(_mintAmount),
+        name: name,
+        symbol: symbol,
+        // data: event,
+      };
+      console.log(JSON.stringify(Data, null, 8));
+ try{
+      const tx = await db.add(Data, "nfts");
+      console.log("tx", tx);
+      const result = await db.get("nfts");
+      console.log("result", result);
+ }catch (error) {
+   console.log("error", error);
+ }
   });
  }
  

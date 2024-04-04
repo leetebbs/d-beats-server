@@ -2,24 +2,14 @@ const { factoryContract, marketplaceContract } = require("../index.js");
 
 class NFTService {
   async createNFT(
-    initialOwner,
-    artistAddress,
-    metadata,
-    mintAmount,
-    name,
-    symbol
+    initialOwner, artistAddress, nftAddress, mintAmount, tokenURI
   ) {
     try {
       const tx = await factoryContract.createNFT(
-        initialOwner,
-        artistAddress,
-        metadata,
-        mintAmount,
-        name,
-        symbol
+        initialOwner, artistAddress, nftAddress, mintAmount, tokenURI
       );
       await tx.wait();
-      return { message: "NFT created successfully" };
+      return { message: "NFT created successfully", data: tx };
     } catch (error) {
       throw new Error(`Error creating NFT: ${error.message}`);
     }
