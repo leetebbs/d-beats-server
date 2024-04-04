@@ -54,7 +54,7 @@ async function factoryListener() {
        symbol: symbol,
        data: event,
      }
- 
+ // we need to store this info in the database when to event is triggered
      console.log(JSON.stringify(info, null, 8));
   });
  }
@@ -72,7 +72,7 @@ async function marketplaceListener() {
        price: price,
        data: event,
      }
- 
+ // we need to store this info in the database when to event is triggered
      console.log(JSON.stringify(info, null, 8));
   });
 
@@ -83,7 +83,7 @@ async function marketplaceListener() {
        tokenId: tokenId,
        data: event,
      }
- 
+ // we need to store this info in the database when to event is triggered
      console.log(JSON.stringify(info, null, 8));
   });
 
@@ -96,7 +96,7 @@ async function marketplaceListener() {
        price: price,
        data: event,
      }
- 
+ // we need to store this info in the database when to event is triggered
      console.log(JSON.stringify(info, null, 8));
   });
  }
