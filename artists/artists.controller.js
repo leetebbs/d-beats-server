@@ -4,15 +4,15 @@ const artistController = {
   async submitApplication(req, res) {
     try {
       const { userId, twitterHandle } = req.body;
-      await artistService.submitArtistApplication(userId, twitterHandle);
+      const result =await artistService.submitArtistApplication(userId, twitterHandle);
       res
         .status(200)
-        .json({ message: "Artist application submitted successfully" });
+        .json({ message: "Artist application submitted successfully" , result });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   },
-  async reviewApplications(req, res) {
+  async reviewApplications(req, res) { 
     try {
       const pendingApplications = await artistService.getPendingApplications();
       res.status(200).json(pendingApplications);

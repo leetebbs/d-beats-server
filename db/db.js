@@ -2,19 +2,19 @@ const WeaveDB = require("weavedb-sdk-node");
 require("dotenv").config(); // Correctly load environment variables
 
 const wallet = {
-  getAddressString: () => process.env.REACT_APP_ADMIN_ADDRESS.toLowerCase(),
+  getAddressString: () => process.env.ADMIN_ADDRESS.toLowerCase(),
   getPrivateKey: () =>
-    Buffer.from(process.env.REACT_APP_ADMIN_PRIVATE_KEY, "hex"),
+    Buffer.from(process.env.ADMIN_PRIVATE_KEY, "hex"),
 };
 
 let db; // Define db outside of the init function
-const ownerAddress = process.env.REACT_APP_ADMIN_ADDRESS; // Replace with the actual owner's address
+const ownerAddress = process.env.ADMIN_ADDRESS; // Replace with the actual owner's address
 
 // Set the owner as a global variable
 global.owner = ownerAddress;
 // Initialize WeaveDB
 async function init() {
-  db = new WeaveDB({ contractTxId: process.env.REACT_APP_CONTRACT_TX_ID });
+  db = new WeaveDB({ contractTxId: process.env.CONTRACT_TX_ID });
   await db.initializeWithoutWallet();
   db.setDefaultWallet(wallet, "evm");
 }
