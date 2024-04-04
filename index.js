@@ -55,6 +55,12 @@ app.get("/", (req, res) => {
   res.send("Welcome to D-Beat backend!");
 });
 
+// endpoint to fetch all nfts minted
+app.get("/allNfts", async (req, res) => {
+  const result = await db.get("nfts");
+  res.status(200).json(result);
+})
+
 //factory listener
 async function factoryListener() {
   const Fcontract = new ethers.Contract(factoryAddress, factoryAbi, wssProvider);
