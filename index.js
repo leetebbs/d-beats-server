@@ -3,10 +3,17 @@ const cors = require("cors");
 const { ethers } = require("ethers");
 require("dotenv").config();
 
-//importing the abi files
+//importing the abi
 const factoryAbi = require("./abi/factoryAbi.json");
 const marketplaceAbi = require("./abi/marketplaceAbi.json");
-
+const factoryAddress = "0x036E9Ba2FF01F2C6452B8fcd11c26B67534F73B4";
+const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C";
+const wssProvider = new ethers.providers.WebSocketProvider(
+  `wss://arb-sepolia.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_ARB_SEPOLIA_KEY}`
+);
+const provider = new ethers.providers.WebSocketProvider(
+  `wss://arb-sepolia.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_ARB_SEPOLIA_KEY}`
+);
 //importing the routes
 const routes = require("./routes.js");
 const artistRoutes = require("./artists/artists.routes.js");
@@ -32,12 +39,26 @@ app.get("/", (req, res) => {
   res.send("Welcome to D-Beat backend!");
 });
 
-const factoryAddress = "0x036E9Ba2FF01F2C6452B8fcd11c26B67534F73B4";
-const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C";
-
-const provider = new ethers.providers.WebSocketProvider(
-  `wss://arb-sepolia.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_ARB_SEPOLIA_KEY}`
-);
+async function factoryListener() {
+  const Fcontract = new ethers.Contract(factoryAddress, factoryAbi, wssProvider);
+ 
+  Fcontract.on("NewNFT", (nftAddress, _initialOwner, _artistAddress, _newTokenURI, _mintAmount, name, symbol, event) => {
+     let info = {
+       nftAddress: nftAddress,
+       initialOwner: _initialOwner,
+       artistAddress: _artistAddress,
+       newTokenURI: _newTokenURI,
+       mintAmount: _mintAmount,
+       name: name,
+       symbol: symbol,
+       data: event,
+     }
+ 
+     console.log(JSON.stringify(info, null, 8));
+  });
+ }
+ 
+factoryListener();
 
 // Use ES module syntax for exporting
 const factoryContract = new ethers.Contract(
