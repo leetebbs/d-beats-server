@@ -39,6 +39,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to D-Beat backend!");
 });
 
+//factory listener
 async function factoryListener() {
   const Fcontract = new ethers.Contract(factoryAddress, factoryAbi, wssProvider);
  
@@ -59,6 +60,48 @@ async function factoryListener() {
  }
  
 factoryListener();
+
+//marketplace listener
+async function marketplaceListener() {
+  const Mcontract = new ethers.Contract(marketplaceAddress, marketplaceAbi, wssProvider);
+ //Listen to items listed event
+  Mcontract.on("ItemListed", (nftAddress, tokenId, price, event) => {
+     let info = {
+       nftAddress: nftAddress,
+       tokenId: tokenId,
+       price: price,
+       data: event,
+     }
+ 
+     console.log(JSON.stringify(info, null, 8));
+  });
+
+  //Listen to items canceled event
+  Mcontract.on("ItemCanceled", (nftAddress, tokenId, event) => {
+     let info = {
+       nftAddress: nftAddress,
+       tokenId: tokenId,
+       data: event,
+     }
+ 
+     console.log(JSON.stringify(info, null, 8));
+  });
+
+  //Listen to items bought event
+  Mcontract.on("ItemBought", (nftAddress, tokenId, buyer, price, event) => {
+     let info = {
+       nftAddress: nftAddress,
+       tokenId: tokenId,
+       buyer: buyer,
+       price: price,
+       data: event,
+     }
+ 
+     console.log(JSON.stringify(info, null, 8));
+  });
+ }
+ 
+marketplaceListener();
 
 // Use ES module syntax for exporting
 const factoryContract = new ethers.Contract(
