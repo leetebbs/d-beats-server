@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
   createNFT,
-  getNFTsByCreator,
+  getNFTsByArtist,
   listNFT,
   cancelNFTListing,
   buyNFT,
@@ -11,8 +11,7 @@ const {
 
 // DBeatsFactory endpoints
 router.post("/nfts", createNFT);
-router.get("/nfts/creator/:address", getNFTsByCreator);
-router.get("/artist/:address", getNFTsByArtist);
+router.get("/nfts/artist/:address", getNFTsByArtist);
 
 // DBeatsMarketplace endpoints
 router.post("/nfts/:nftAddress/:tokenId/list", listNFT);
