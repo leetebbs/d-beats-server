@@ -10,7 +10,7 @@ const createNFT = async (req, res) => {
       nftAddress,
       // metadata,
       mintAmount,
-      tokenURI,
+      tokenURI
       // name,
       // symbol
     );
