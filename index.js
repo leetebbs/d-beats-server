@@ -3,6 +3,7 @@ const cors = require("cors");
 const { ethers } = require("ethers");
 require("dotenv").config();
 var WeaveDB = require("weavedb-sdk-node");
+var nftAbi = require("./utils/nftAbi.js");
 
 //importing the abi
 const factoryAbi = require("./abi/factoryAbi.json");
@@ -28,7 +29,7 @@ const wssProvider = new ethers.providers.WebSocketProvider(
   `wss://arb-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_ARB_SEPOLIA_KEY}`
 );
 const provider = new ethers.providers.WebSocketProvider(
-  `wss://arb-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_ARB_SEPOLIA_KEY}`
+  `https://arb-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_ARB_SEPOLIA_KEY}`
 );
 //importing the routes
 // const routes = require("./routes.js");
@@ -58,6 +59,19 @@ app.get("/", (req, res) => {
 // endpoint to fetch all nfts minted
 app.get("/allNfts", async (req, res) => {
   const result = await db.get("nfts");
+  res.status(200).json(result);
+});
+// endpoint to fetch all nfts listed
+app.get("/listed", async (req, res) => {
+  const result = await db.get("listed");
+  // console.log(result) 
+  // var contract = new ethers.Contract(
+  //   result.nftAddress,
+  //   nftAbi, 
+  //   provider
+  // )
+
+  // console.log("contract", contract);
   res.status(200).json(result);
 });
 
