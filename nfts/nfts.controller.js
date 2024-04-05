@@ -10,7 +10,7 @@ const createNFT = async (req, res) => {
       nftAddress,
       // metadata,
       mintAmount,
-      tokenURI,
+      tokenURI
       // name,
       // symbol
     );
@@ -20,25 +20,15 @@ const createNFT = async (req, res) => {
   }
 };
 
-const getNFTsByArtist = async (req, res) => {
+const getNFTsByCreator = async (req, res) => {
   try {
     const { address } = req.params;
-    const nfts = await NFTService.getNFTsByArtist(address);
-    res.status(200).json(nfts);
+    const nftAddresses = await NFTService.getNFTsByCreator(address);
+    res.status(200).json(nftAddresses);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
-// const getNFTsByCreator = async (req, res) => {
-//   try {
-//     const { address } = req.params;
-//     const nftAddresses = await NFTService.getNFTsByCreator(address);
-//     res.status(200).json(nftAddresses);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 const listNFT = async (req, res) => {
   try {
@@ -82,7 +72,7 @@ const getNFTPrice = async (req, res) => {
 
 module.exports = {
   createNFT,
-  getNFTsByArtist,
+  getNFTsByCreator,
   listNFT,
   cancelNFTListing,
   buyNFT,
