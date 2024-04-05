@@ -8,8 +8,8 @@ var WeaveDB = require("weavedb-sdk-node");
 const factoryAbi = require("./abi/factoryAbi.json");
 const marketplaceAbi = require("./abi/marketplaceAbi.json");
 const factoryAddress = "0x036E9Ba2FF01F2C6452B8fcd11c26B67534F73B4";
-const marketplaceAddress = "0x4690C5d846Abb49d0b6B2a04D4aa3B16e4aFC287"; 
-// const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C"; 
+// const marketplaceAddress = "0x4690C5d846Abb49d0b6B2a04D4aa3B16e4aFC287";
+const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C";
 const wallet = {
   getAddressString: () => process.env.ADMIN_ADDRESS.toLowerCase(),
   getPrivateKey: () => Buffer.from(process.env.ADMIN_PRIVATE_KEY, "hex"),
@@ -108,42 +108,73 @@ factoryListener();
 
 //marketplace listener
 async function marketplaceListener() {
-  const Mcontract = new ethers.Contract(marketplaceAddress, marketplaceAbi, wssProvider);
- //Listen to items listed event
-  Mcontract.on("ItemListed", (nftAddress, tokenId, price, event) => {
-     let info = {
-       nftAddress: nftAddress,
-       tokenId: tokenId,
-       price: price,
-       data: event,
-     }
- // we need to store this info in the database when to event is triggered
-     console.log(JSON.stringify(info, null, 8));
+  const Mcontract = new ethers.Contract(
+    marketplaceAddress,
+    marketplaceAbi,
+    wssProvider
+  );
+  //Listen to items listed event
+  Mcontract.on("ItemListed", async (nftAddress, tokenId, price, event) => {
+    let Data = {
+      nftAddress: nftAddress,
+      tokenId: parseInt(tokenId),
+      price: parseInt(price),
+      //  data: event,
+    };
+    // we need to store this info in the database when to event is triggered
+    console.log(JSON.stringify(Data, null, 8));
+    try {
+      const tx = await db.add(Data, "listed");
+      console.log("tx", tx);
+      const result = await db.get("listed");
+      console.log("result", result);
+    } catch (error) {
+      console.log("error", error);
+    }
   });
 
   //Listen to items canceled event
-  Mcontract.on("ItemCanceled", (nftAddress, tokenId, event) => {
-     let info = {
-       nftAddress: nftAddress,
-       tokenId: tokenId,
-       data: event,
-     }
- // we need to store this info in the database when to event is triggered
-     console.log(JSON.stringify(info, null, 8));
+  Mcontract.on("ItemCanceled", async (nftAddress, tokenId, event) => {
+    let Data = {
+      nftAddress: nftAddress,
+      tokenId: parseInt(tokenId),
+      //  data: event,
+    };
+    // we need to store this info in the database when to event is triggered
+    console.log(JSON.stringify(Data, null, 8));
+    try {
+      const tx = await db.add(Data, "cancelled");
+      console.log("tx", tx);
+      const result = await db.get("cancelled");
+      console.log("result", result);
+    } catch (error) {
+      console.log("error", error);
+    }
   });
 
   //Listen to items bought event
-  Mcontract.on("ItemBought", (nftAddress, tokenId, buyer, price, event) => {
-     let info = {
-       nftAddress: nftAddress,
-       tokenId: tokenId,
-       buyer: buyer,
-       price: price,
-       data: event,
-     }
- // we need to store this info in the database when to event is triggered
-     console.log(JSON.stringify(info, null, 8));
-  });
+  Mcontract.on(
+    "ItemBought",
+    async (nftAddress, tokenId, buyer, price, event) => {
+      let Data = {
+        nftAddress: nftAddress,
+        tokenId: parseInt(tokenId),
+        buyer: buyer,
+        price: parseInt(price),
+        //  data: event,
+      };
+      // we need to store this info in the database when to event is triggered
+      console.log(JSON.stringify(Data, null, 8));
+      try {
+        const tx = await db.add(Data, "bought");
+        console.log("tx", tx);
+        const result = await db.get("bought");
+        console.log("result", result);
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  );
 }
 
 marketplaceListener();
