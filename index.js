@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { ethers } = require("ethers");
 require("dotenv").config();
+var WeaveDB = require('weavedb-sdk-node');
 
 const nftsService = require("./nfts/nfts.service.js");
 
@@ -9,7 +10,22 @@ const nftsService = require("./nfts/nfts.service.js");
 const factoryAbi = require("./abi/factoryAbi.json");
 const marketplaceAbi = require("./abi/marketplaceAbi.json");
 const factoryAddress = "0x036E9Ba2FF01F2C6452B8fcd11c26B67534F73B4";
-const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C";
+const marketplaceAddress = "0x4690C5d846Abb49d0b6B2a04D4aa3B16e4aFC287"; 
+// const marketplaceAddress = "0x306F0d6247760e23A91acD6E088bE593D1D0Bf9C"; 
+const wallet = {
+  getAddressString: () => process.env.ADMIN_ADDRESS.toLowerCase(),
+  getPrivateKey: () => Buffer.from(process.env.ADMIN_PRIVATE_KEY, "hex"),
+};
+let db;
+global.owner = process.env.ADMIN_ADDRESS;
+// Initialize WeaveDB
+async function init() {
+  db = new WeaveDB({ contractTxId: process.env.CONTRACT_TX_ID });
+  await db.initializeWithoutWallet();
+  db.setDefaultWallet(wallet, "evm");
+}
+
+init();
 const wssProvider = new ethers.providers.WebSocketProvider(
   `wss://arb-sepolia.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_ARB_SEPOLIA_KEY}`
 );
@@ -41,8 +57,15 @@ app.get("/", (req, res) => {
   res.send("Welcome to D-Beat backend!");
 });
 
+// endpoint to fetch all nfts minted
+app.get("/allNfts", async (req, res) => {
+  const result = await db.get("nfts");
+  res.status(200).json(result);
+})
+
 //factory listener
 async function factoryListener() {
+<<<<<<< HEAD
   const Fcontract = new ethers.Contract(
     factoryAddress,
     factoryAbi,
@@ -62,10 +85,17 @@ async function factoryListener() {
       event
     ) => {
       let info = {
+=======
+  const Fcontract = new ethers.Contract(factoryAddress, factoryAbi, wssProvider);
+  
+  Fcontract.on("NewNFT", async (nftAddress, _initialOwner, _artistAddress, _newTokenURI, _mintAmount, name, symbol, event) => {
+      let Data = {
+>>>>>>> a33f984bee9215901b53977d5c5c3c9c9c4b92b8
         nftAddress: nftAddress,
         initialOwner: _initialOwner,
         artistAddress: _artistAddress,
         newTokenURI: _newTokenURI,
+<<<<<<< HEAD
         mintAmount: _mintAmount,
         name: name,
         symbol: symbol,
@@ -84,6 +114,25 @@ async function factoryListener() {
   );
 }
 
+=======
+        mintAmount: parseInt(_mintAmount),
+        name: name,
+        symbol: symbol,
+        // data: event,
+      };
+      console.log(JSON.stringify(Data, null, 8));
+ try{
+      const tx = await db.add(Data, "nfts");
+      console.log("tx", tx);
+      const result = await db.get("nfts");
+      console.log("result", result);
+ }catch (error) {
+   console.log("error", error);
+ }
+  });
+ }
+ 
+>>>>>>> a33f984bee9215901b53977d5c5c3c9c9c4b92b8
 factoryListener();
 
 //marketplace listener
