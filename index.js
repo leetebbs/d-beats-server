@@ -31,20 +31,20 @@ const provider = new ethers.providers.WebSocketProvider(
   `wss://arb-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_ARB_SEPOLIA_KEY}`
 );
 //importing the routes
-const routes = require("./routes.js");
-const artistRoutes = require("./artists/artists.routes.js");
-const uploadRoutes = require("./uploads/uploads.routes.js");
-const nftsRoutes = require("./nfts/nfts.routes.js");
+// const routes = require("./routes.js");
+// const artistRoutes = require("./artists/artists.routes.js");
+// const uploadRoutes = require("./uploads/uploads.routes.js");
+// const nftsRoutes = require("./nfts/nfts.routes.js");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // Use the routes
-app.use("/", routes);
-app.use("/artists", artistRoutes);
-app.use("/uploads", uploadRoutes);
-app.use("/nfts", nftsRoutes);
+// app.use("/", routes);
+// app.use("/artists", artistRoutes);
+// app.use("/uploads", uploadRoutes);
+// app.use("/nfts", nftsRoutes);
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);

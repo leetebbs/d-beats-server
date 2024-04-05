@@ -30,7 +30,7 @@ const artistService = {
   async getArtists(){
     const result = await db.get("Artist");
     return result;
-  },
+  }
   // const addTask = async (task) => {
   //   await db.add(
   //     {

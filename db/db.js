@@ -5,7 +5,7 @@ const wallet = {
   getAddressString: () => process.env.ADMIN_ADDRESS.toLowerCase(),
   getPrivateKey: () =>
     Buffer.from(process.env.ADMIN_PRIVATE_KEY, "hex"),
-};
+}; 
 
 let db; // Define db outside of the init function
 const ownerAddress = process.env.ADMIN_ADDRESS; // Replace with the actual owner's address
