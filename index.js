@@ -26,10 +26,10 @@ async function init() {
 
 init();
 const wssProvider = new ethers.providers.WebSocketProvider(
-  `wss://arb-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_ARB_SEPOLIA_KEY}`
+  `wss://arb-sepolia.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_ARB_SEPOLIA_KEY}`
 );
 const provider = new ethers.providers.WebSocketProvider(
-  `https://arb-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_ARB_SEPOLIA_KEY}`
+  `https://arb-sepolia.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_ARB_SEPOLIA_KEY}`
 );
 //importing the routes
 // const routes = require("./routes.js");
