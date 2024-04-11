@@ -864,4 +864,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-module.exports = { factoryContract, marketplaceContract };
+module.exports = { factoryContract, marketplaceContract, app };
