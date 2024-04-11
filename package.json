@@ -21,7 +21,6 @@
     "helia": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
-    "weavedb-sdk": "^0.39.2",
     "weavedb-sdk-node": "^0.39.2"
   }
 }
